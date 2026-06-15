@@ -215,7 +215,7 @@ onMounted(fetchProducts)
       <!-- EMPTY -->
       <div class="state-box" v-else-if="filtered.length === 0">
         <div class="state-icon">📭</div>
-        <div class="state-title">บ่พ้อสินค้า</div>
+        <div class="state-title">บ่พ้อสินค้าเลย</div>
         <div class="state-desc">
           {{ search || catFilter ? 'ลองเปลี่ยน keyword หรือ filter' : 'กดปุ่ม "+ เพิ่มสินค้า" เพื่อเริ่มต้น' }}
         </div>
