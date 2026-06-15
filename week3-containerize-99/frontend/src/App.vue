@@ -238,7 +238,7 @@ onMounted(fetchProducts)
             </div>
             <div class="stock-info">
               <div class="stock-row">
-                <span class="stock-label">สต็อก</span>
+                <span class="stock-label">คลังสินค้า</span>
                 <span class="stock-num" :class="stockClass(p.stock)">
                   {{ p.stock.toLocaleString() }} ชิ้น
                   <span v-if="p.stock <= 0"> — หมดแล้ว!</span>
