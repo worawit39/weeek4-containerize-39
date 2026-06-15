@@ -287,7 +287,7 @@ onMounted(fetchProducts)
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">จำนวนสต็อก (ชิ้น) *</label>
+            <label class="form-label">จำนวนสต็อก (items) *</label>
             <input class="form-input" v-model="form.stock" type="number" min="0" placeholder="0" required />
           </div>
           <div class="form-group">
