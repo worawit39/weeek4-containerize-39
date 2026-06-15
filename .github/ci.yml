@@ -1,0 +1,51 @@
+name: CI — StockPro    # ชื่อที่โชว์ใน GitHub Actions tab
+
+# ── on: กำหนด "เมื่อไหร่" จะ trigger ─────────────────────────
+on:
+  push:
+    branches:
+      - develop          # ทริกเกอร์เมื่อ push ไป develop
+      - 'feature/**'     # ทริกเกอร์เมื่อ push ไป feature/xxx
+  pull_request:
+    branches:
+      - develop          # ทริกเกอร์เมื่อเปิด PR เข้า develop
+      - main             # ทริกเกอร์เมื่อเปิด PR เข้า main
+
+# ── jobs: งานที่ต้องทำ ─────────────────────────────────────────
+jobs:
+  test-and-build:
+    name: Test & Build
+    runs-on: ubuntu-latest    # ใช้ Runner Ubuntu ฟรีจาก GitHub
+
+    steps:
+      # ── Step 1: ดึง source code มาที่ Runner ─────────────────
+      - name: Checkout code
+        uses: actions/checkout@v4    # Action สำเร็จรูปจาก marketplace
+
+      # ── Step 2: ติดตั้ง Node.js 20 ───────────────────────────
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # ── Step 3-4: Backend ─────────────────────────────────────
+      - name: Install backend dependencies
+        working-directory: backend    # cd เข้าไปใน folder backend/ ก่อนรัน
+        run: npm ci                   # ci = clean install (เร็วกว่า npm install)
+
+    #  - name: Lint backend code
+     #   working-directory: backend
+     #   run: npm run lint             # รัน ESLint ตรวจ code style
+
+      # ── Step 5-6: Frontend ────────────────────────────────────
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend (production mode)
+        working-directory: frontend
+        run: npm run build    # Vite build → สร้าง dist/ folder
+
+      # ── Step 7: Docker smoke test ─────────────────────────────
+      - name: Build Docker images (smoke test)
+        run: docker compose build    # ทดสอบว่า Dockerfile ทั้งคู่ build ได้
