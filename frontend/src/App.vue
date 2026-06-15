@@ -155,14 +155,14 @@ onMounted(fetchProducts)
         <div class="stat-card">
           <div class="stat-icon si-green">📦</div>
           <div class="stat-body">
-            <div class="stat-val" style="color:#1da078">{{ stats.total }}</div>
+            <div class="stat-val" style="color:#059669">{{ stats.total }}</div>
             <div class="stat-label">สินค้าทั้งหมด</div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon si-red">⚠️</div>
           <div class="stat-body">
-            <div class="stat-val" style="color:#c62222">{{ stats.lowStock }}</div>
+            <div class="stat-val" style="color:#dc2626">{{ stats.lowStock }}</div>
             <div class="stat-label">สต็อกใกล้หมด (<10)</div>
           </div>
         </div>
@@ -215,7 +215,7 @@ onMounted(fetchProducts)
       <!-- EMPTY -->
       <div class="state-box" v-else-if="filtered.length === 0">
         <div class="state-icon">📭</div>
-        <div class="state-title">บ่พ้อสินค้า</div>
+        <div class="state-title">ไม่พบสินค้า</div>
         <div class="state-desc">
           {{ search || catFilter ? 'ลองเปลี่ยน keyword หรือ filter' : 'กดปุ่ม "+ เพิ่มสินค้า" เพื่อเริ่มต้น' }}
         </div>
@@ -238,7 +238,7 @@ onMounted(fetchProducts)
             </div>
             <div class="stock-info">
               <div class="stock-row">
-                <span class="stock-label">คลังสินค้า</span>
+                <span class="stock-label">สต็อก</span>
                 <span class="stock-num" :class="stockClass(p.stock)">
                   {{ p.stock.toLocaleString() }} ชิ้น
                   <span v-if="p.stock <= 0"> — หมดแล้ว!</span>
@@ -287,7 +287,7 @@ onMounted(fetchProducts)
             </div>
           </div>
           <div class="form-group">
-            <label class="form-label">จำนวนสต็อก (items) *</label>
+            <label class="form-label">จำนวนสต็อก (ชิ้น) *</label>
             <input class="form-input" v-model="form.stock" type="number" min="0" placeholder="0" required />
           </div>
           <div class="form-group">
