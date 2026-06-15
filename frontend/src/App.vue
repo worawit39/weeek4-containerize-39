@@ -319,7 +319,7 @@ onMounted(fetchProducts)
         </div>
       </div>
     </div>
-
+<footer>hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh</footer>
   </div>
 </template>
 
