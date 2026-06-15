@@ -162,7 +162,7 @@ onMounted(fetchProducts)
         <div class="stat-card">
           <div class="stat-icon si-red">⚠️</div>
           <div class="stat-body">
-            <div class="stat-val" style="color:#dc2626">{{ stats.lowStock }}</div>
+            <div class="stat-val" style="color:#c62222">{{ stats.lowStock }}</div>
             <div class="stat-label">สต็อกใกล้หมด (<10)</div>
           </div>
         </div>
