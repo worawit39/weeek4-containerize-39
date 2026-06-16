@@ -319,7 +319,7 @@ onMounted(fetchProducts)
         </div>
       </div>
     </div>
-
+<footer>นายวรวิช จำปานิล ปวส2/3 039</footer>
   </div>
 </template>
 
