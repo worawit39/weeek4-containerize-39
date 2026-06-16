@@ -1,0 +1,68 @@
+name: CD — Deploy StockPro
+
+on:
+  push:
+    branches:
+      - main       # merge เข้า main → build + push image
+    tags:
+      - 'v*'       # push tag v1.0.0 → build versioned image
+
+jobs:
+  # ── Job 1: Build + Push Docker images ไปยัง Docker Hub ──────────
+  build-and-push:
+    name: Build & Push to Docker Hub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # กำหนด image tag: ถ้าเป็น git tag → ใช้ tag นั้น, ไม่งั้น → "latest"
+      - name: Determine image version tag
+        id: version
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=latest" >> $GITHUB_OUTPUT
+          fi
+          # GITHUB_REF ตัวอย่าง: refs/tags/v1.0.0
+          # ${GITHUB_REF#refs/tags/} = ตัด prefix → เหลือ v1.0.0
+
+      # Login เข้า Docker Hub (ไม่ต้องระบุ registry = Docker Hub อัตโนมัติ)
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}    # ใช้ Access Token ไม่ใช่ password
+
+      # Build Backend image → push 2 tags: version + latest
+      - name: Build & push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/stockpro-backend:${{ steps.version.outputs.tag }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/stockpro-backend:latest
+
+      # Build Frontend image → push
+      - name: Build & push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/stockpro-frontend:${{ steps.version.outputs.tag }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/stockpro-frontend:latest
+
+  # ── Job 2: SSH Deploy — จะเพิ่มใน Week 7 เมื่อมี Server ─────────
+  # deploy:
+  #   name: Deploy to Server
+  #   needs: build-and-push
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: appleboy/ssh-action@v1
+  #       with:
+  #         host: ${{ secrets.SERVER_HOST }}
+  #         ...    ← Week 7
